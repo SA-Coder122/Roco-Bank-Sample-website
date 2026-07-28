@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEXIS | Elite Performance Gear</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { heading: ['Oswald', 'sans-serif'], body: ['Inter', 'sans-serif'] },
+                    colors: { accent: '#ccff00', dark: '#050505' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #050505; color: #e5e7eb; overflow-x: hidden; }
+        .reveal { opacity: 0; transform: translateY(30px); }
+        .nav-blur { backdrop-filter: blur(12px); background: rgba(5, 5, 5, 0.8); }
+        .product-card img { transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1); }
+        .product-card:hover img { transform: scale(1.05); }
+        .btn-skew { transform: skewX(-10deg); }
+        .btn-skew > span { transform: skewX(10deg); display: inline-block; }
+    </style>
+</head>
+<body class="font-body">
+
+    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] bg-accent text-black font-bold py-3 px-8 rounded-full opacity-0 pointer-events-none transition-all duration-300 transform translate-y-10">
+        Added to Bag
+    </div>
+
+    <nav class="fixed w-full z-50 top-0 nav-blur border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center h-20">
+            <div class="font-heading text-3xl font-bold tracking-tighter italic">AEX<span class="text-accent">IS</span></div>
+            
+            <div class="hidden md:flex space-x-10 text-xs font-bold uppercase tracking-widest">
+                <a href="#categories" class="hover:text-accent transition-colors">Categories</a>
+                <a href="#gear" class="hover:text-accent transition-colors">Products</a>
+                <a href="#athletes" class="hover:text-accent transition-colors">Athletes</a>
+            </div>
+
+            <div class="flex items-center space-x-6">
+                <div class="relative cursor-pointer" onclick="toggleCart()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-accent text-black text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">0</span>
+                </div>
+                <button class="bg-white text-black px-6 py-2 font-heading font-bold uppercase text-sm hover:bg-accent transition-all btn-skew">
+                    <span>Join Team</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-black/50 z-10"></div>
+            <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover" alt="Hero">
+        </div>
+        
+        <div class="relative z-20 text-center px-4">
+            <h1 id="hero-title" class="font-heading text-7xl md:text-9xl font-bold uppercase tracking-tighter leading-none italic">
+                MOVE WITH <br><span class="text-accent">PURPOSE.</span>
+            </h1>
+            <p class="mt-6 text-lg md:text-xl max-w-xl mx-auto font-light text-gray-300">High-performance gear engineered for the relentless athlete.</p>
+            <div class="mt-10 flex flex-col md:flex-row gap-4 justify-center">
+                <a href="#gear" class="bg-accent text-black px-10 py-4 font-heading font-bold uppercase tracking-widest btn-skew hover:scale-105 transition-transform">
+                    <span>Shop Latest</span>
+                </a>
+                <a href="#athletes" class="border border-white text-white px-10 py-4 font-heading font-bold uppercase tracking-widest btn-skew hover:bg-white hover:text-black transition-all">
+                    <span>The Roster</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="categories" class="py-24 px-6 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="reveal relative h-[500px] group overflow-hidden cursor-pointer" onclick="filterProducts('footwear')">
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Shoes">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-8">
+                    <h3 class="font-heading text-4xl font-bold uppercase italic">Footwear</h3>
+                </div>
+            </div>
+            <div class="reveal relative h-[500px] group overflow-hidden cursor-pointer" onclick="filterProducts('apparel')">
+                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Apparel">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-8">
+                    <h3 class="font-heading text-4xl font-bold uppercase italic">Training</h3>
+                </div>
+            </div>
+            <div class="reveal relative h-[500px] group overflow-hidden cursor-pointer" onclick="filterProducts('accessories')">
+                <img src="https://images.unsplash.com/photo-1584735174965-48c48d7028a9?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Accessories">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-8">
+                    <h3 class="font-heading text-4xl font-bold uppercase italic">Essentials</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gear" class="py-24 bg-zinc-900 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                <div>
+                    <h2 class="font-heading text-5xl font-bold uppercase italic italic">Engineered Gear</h2>
+                    <p class="text-gray-400 mt-2">Filter by discipline</p>
+                </div>
+                <div class="flex flex-wrap gap-4 font-heading text-sm tracking-widest">
+                    <button onclick="filterProducts('all')" class="filter-btn text-accent border-b-2 border-accent pb-1">ALL</button>
+                    <button onclick="filterProducts('footwear')" class="filter-btn text-gray-500 hover:text-white transition-colors pb-1">FOOTWEAR</button>
+                    <button onclick="filterProducts('apparel')" class="filter-btn text-gray-500 hover:text-white transition-colors pb-1">APPAREL</button>
+                    <button onclick="filterProducts('accessories')" class="filter-btn text-gray-500 hover:text-white transition-colors pb-1">EQUIPMENT</button>
+                </div>
+            </div>
+
+            <div id="product-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+                </div>
+        </div>
+    </section>
+
+    <section class="py-32 bg-black overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 items-center gap-20">
+            <div class="reveal relative">
+                <img src="https://images.unsplash.com/photo-1599058917233-35f91d1c4e7b?auto=format&fit=crop&q=80&w=800" class="rounded-sm grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl" alt="Discipline">
+                <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-accent -z-10"></div>
+            </div>
+            <div class="reveal">
+                <h2 class="font-heading text-6xl font-bold uppercase leading-none italic mb-8">Discipline <br>Is <span class="text-accent">Freedom.</span></h2>
+                <p class="text-xl text-gray-400 font-light leading-relaxed mb-10">
+                    We don't design for the hobbyist. We design for the 4 AM grinders, the track-stars, and the weight-room warriors. Our gear is the last thing you'll need to worry about.
+                </p>
+                <button class="bg-white text-black font-heading font-bold uppercase px-8 py-4 btn-skew hover:bg-accent transition-colors">
+                    <span>Our Philosophy</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="athletes" class="py-24 bg-zinc-950 px-6 overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="reveal font-heading text-center text-5xl font-bold uppercase italic mb-16">The Roster</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="reveal group relative">
+                    <img src="https://images.unsplash.com/photo-1548690312-e3b507d8c110?auto=format&fit=crop&q=80&w=600" class="w-full h-[600px] object-cover grayscale group-hover:grayscale-0 transition-all duration-500" alt="Athlete">
+                    <div class="absolute bottom-0 p-8 w-full bg-gradient-to-t from-black to-transparent">
+                        <span class="text-accent font-bold text-xs tracking-widest uppercase">CrossFit</span>
+                        <h4 class="font-heading text-3xl font-bold uppercase italic">Vance Thompson</h4>
+                    </div>
+                </div>
+                <div class="reveal group relative">
+                    <img src="https://images.unsplash.com/photo-1534367507873-d2b7e24c79d2?auto=format&fit=crop&q=80&w=600" class="w-full h-[600px] object-cover grayscale group-hover:grayscale-0 transition-all duration-500" alt="Athlete">
+                    <div class="absolute bottom-0 p-8 w-full bg-gradient-to-t from-black to-transparent">
+                        <span class="text-accent font-bold text-xs tracking-widest uppercase">Sprinter</span>
+                        <h4 class="font-heading text-3xl font-bold uppercase italic">Elena Rodriguez</h4>
+                    </div>
+                </div>
+                <div class="reveal group relative">
+                    <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&q=80&w=600" class="w-full h-[600px] object-cover grayscale group-hover:grayscale-0 transition-all duration-500" alt="Athlete">
+                    <div class="absolute bottom-0 p-8 w-full bg-gradient-to-t from-black to-transparent">
+                        <span class="text-accent font-bold text-xs tracking-widest uppercase">Boxing</span>
+                        <h4 class="font-heading text-3xl font-bold uppercase italic">Marcus Iron</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-black py-20 px-6 border-t border-white/5">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div class="col-span-1 md:col-span-2">
+                <div class="font-heading text-4xl font-bold italic mb-6">AEXIS</div>
+                <p class="text-gray-500 max-w-sm">Elevating the human spirit through the power of sport and innovative engineering.</p>
+                <div class="mt-8">
+                    <form class="flex max-w-sm">
+                        <input type="email" placeholder="JOIN THE MOVEMENT" class="bg-zinc-900 border-none px-4 py-3 w-full text-sm focus:ring-1 focus:ring-accent outline-none">
+                        <button class="bg-accent text-black px-6 font-bold font-heading">GO</button>
+                    </form>
+                </div>
+            </div>
+            <div>
+                <h5 class="font-heading font-bold uppercase tracking-widest text-accent mb-6">Explore</h5>
+                <ul class="text-sm space-y-4 text-gray-400 uppercase font-bold tracking-tight">
+                    <li><a href="#" class="hover:text-white transition-colors">New Drops</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Elite Gear</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Sale</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-heading font-bold uppercase tracking-widest text-accent mb-6">Social</h5>
+                <ul class="text-sm space-y-4 text-gray-400 uppercase font-bold tracking-tight">
+                    <li><a href="#" class="hover:text-white transition-colors">Instagram</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">YouTube</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-white/5 text-[10px] text-gray-600 uppercase tracking-[0.2em]">
+            &copy; 2026 AEXIS Sports. All Rights Reserved. Designed for performance.
+        </div>
+    </footer>
+
+    <script>
+        // --- DATA ---
+        const PRODUCTS = [
+            { id: 1, name: "AEXIS Vapor Runner", price: 180, cat: "footwear", img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600" },
+            { id: 2, name: "Compression V2 Tee", price: 55, cat: "apparel", img: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=600" },
+            { id: 3, name: "Elite Training Duffel", price: 95, cat: "accessories", img: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=600" },
+            { id: 4, name: "Phantom Shorts", price: 45, cat: "apparel", img: "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?q=80&w=600" },
+            { id: 5, name: "Alpha Lift Belts", price: 120, cat: "accessories", img: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=600" },
+            { id: 6, name: "Carbon X Cleats", price: 210, cat: "footwear", img: "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?q=80&w=600" },
+            { id: 7, name: "Thermal Shell Jak", price: 140, cat: "apparel", img: "https://images.unsplash.com/photo-1544923246-77307dd654ca?q=80&w=600" },
+            { id: 8, name: "Pro-Wrap Gloves", price: 35, cat: "accessories", img: "https://images.unsplash.com/photo-1583473848882-f9a5bb7ff2ee?q=80&w=600" },
+        ];
+
+        let cartCount = 0;
+
+        // --- RENDER PRODUCTS ---
+        function renderProducts(filter = 'all') {
+            const container = document.getElementById('product-container');
+            container.innerHTML = '';
+            
+            const filtered = filter === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === filter);
+
+            filtered.forEach(p => {
+                container.innerHTML += `
+                    <div class="product-card reveal opacity-100 transform-none">
+                        <div class="relative bg-zinc-800 aspect-[4/5] overflow-hidden group cursor-pointer">
+                            <img src="${p.img}" class="w-full h-full object-cover" alt="${p.name}">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button onclick="addToCart()" class="bg-accent text-black font-heading font-bold uppercase py-3 px-6 btn-skew scale-90 group-hover:scale-100 transition-transform">
+                                    <span>Add to Bag</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mt-6 flex justify-between items-start">
+                            <div>
+                                <h4 class="font-heading text-xl font-bold uppercase tracking-tight italic">${p.name}</h4>
+                                <p class="text-xs text-gray-500 uppercase tracking-widest">${p.cat}</p>
+                            </div>
+                            <p class="font-heading text-xl font-bold italic">$${p.price}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterProducts(cat) {
+            renderProducts(cat);
+            // Re-trigger scroll reveal if necessary, or just keep them visible
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('text-accent', 'border-b-2', 'border-accent');
+                btn.classList.add('text-gray-500');
+            });
+            event.target.classList.add('text-accent', 'border-b-2', 'border-accent');
+        }
+
+        // --- CART FUNCTION ---
+        function addToCart() {
+            cartCount++;
+            document.getElementById('cart-count').innerText = cartCount;
+            
+            const toast = document.getElementById('toast');
+            toast.style.opacity = '1';
+            toast.style.transform = 'translate(-50%, 0)';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, 40px)';
+            }, 2000);
+        }
+
+        // --- ANIMATIONS ---
+        function initGSAP() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Hero Animation
+            gsap.from("#hero-title", {
+                duration: 1.5,
+                y: 100,
+                opacity: 0,
+                skewY: 7,
+                ease: "power4.out"
+            });
+
+            // Reveal Sections on Scroll
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach((el) => {
+                gsap.to(el, {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 85%",
+                        toggleActions: "play none none none"
+                    },
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: "power3.out"
+                });
+            });
+        }
+
+        // Boot
+        window.onload = () => {
+            renderProducts();
+            initGSAP();
+        };
+    </script>
+</body>
+</html>
