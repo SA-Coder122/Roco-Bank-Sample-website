@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocobank - Professional Banking System</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-light: #f9f9f9;
+            --text-light: #111827;
+            --bg-dark: #121212;
+            --text-dark: #f9f9f9;
+            --card-radius: 24px;
+            --primary: #111827;
+            --accent: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            overflow-x: hidden;
+            transition: background-color 0.5s ease;
+        }
+
+        /* --- NOTIFICATION TOAST --- */
+        #toast {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 500;
+            z-index: 1000;
+            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        #toast.show {
+            bottom: 30px;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            mix-blend-mode: difference;
+            color: white;
+            transition: padding 0.3s ease;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background: white;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+
+        .nav-link:hover {
+            opacity: 0.7;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .btn-solid {
+            background: white;
+            color: black;
+            border: none;
+        }
+
+        .btn-solid:hover {
+            background: #e5e7eb;
+        }
+
+        /* Mobile Nav Toggle */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: var(--bg-dark);
+            z-index: 99;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            transition: right 0.4s ease;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 6rem 5% 2rem;
+            position: relative;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+            z-index: 10;
+        }
+
+        .subtitle {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .title {
+            font-size: clamp(3rem, 5vw, 4.5rem);
+            line-height: 1.1;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+        }
+
+        .title span {
+            display: block;
+        }
+
+        .title-bold {
+            font-weight: 700;
+        }
+
+        .description {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            max-width: 480px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-dark {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+        }
+
+        .btn-light {
+            background: white;
+            color: var(--primary);
+            border: 1px solid #e5e7eb;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+        }
+
+        /* Hero Cards (Right Side) */
+        .hero-cards-container {
+            flex: 1;
+            position: relative;
+            height: 600px;
+            perspective: 1000px;
+        }
+
+        .floating-card {
+            position: absolute;
+            width: 380px;
+            height: 240px;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.4);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: filter 0.3s;
+        }
+
+        .floating-card:hover {
+            filter: brightness(1.1);
+        }
+
+        .card-1 {
+            top: 10%;
+            right: 10%;
+            background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+            z-index: 3;
+            transform: rotate(-5deg);
+        }
+
+        .card-2 {
+            top: 35%;
+            right: 25%;
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            z-index: 2;
+            transform: rotate(5deg);
+        }
+
+        .card-3 {
+            top: 60%;
+            right: 5%;
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            z-index: 1;
+            transform: rotate(-2deg);
+        }
+
+        /* Logos & Avatars Footer */
+        .hero-footer {
+            position: absolute;
+            bottom: 2rem;
+            left: 5%;
+            width: 90%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 2rem;
+        }
+
+        .logos {
+            display: flex;
+            gap: 2rem;
+            opacity: 0.5;
+            filter: grayscale(100%);
+            flex-wrap: wrap;
+        }
+
+        .avatars {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .avatar-block {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 8px 16px 8px 8px;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .avatar-block:hover {
+            transform: translateY(-2px);
+        }
+
+        .avatar-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #ccc;
+            object-fit: cover;
+        }
+
+        .avatar-info p {
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .avatar-info span {
+            font-size: 0.7rem;
+            color: var(--accent);
+        }
+
+        /* --- BENTO GRID SECTION (DARK MODE) --- */
+        .bento-section {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+            padding: 6rem 5%;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: 240px;
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .bento-item {
+            background: #1e1e1e;
+            border-radius: var(--card-radius);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .bento-item:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        .bento-item h3 {
+            font-size: clamp(1.5rem, 2vw, 2rem);
+            font-weight: 500;
+            z-index: 2;
+            line-height: 1.2;
+        }
+
+        .bento-item p {
+            color: #9ca3af;
+            margin-top: 0.5rem;
+            z-index: 2;
+            font-size: 0.9rem;
+        }
+
+        /* Grid Spanning */
+        .item-1 { grid-column: span 1; grid-row: span 2; background: linear-gradient(180deg, #2a2a2a, #121212); }
+        .item-2 { grid-column: span 1; }
+        .item-3 { grid-column: span 2; grid-row: span 2; background: url('https://images.unsplash.com/photo-1616423640778-28d1b53229bd?auto=format&fit=crop&q=80&w=800') center/cover; }
+        .item-3::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.4); }
+        .item-4 { grid-column: span 1; background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+        .item-5 { grid-column: span 1; background: linear-gradient(135deg, #f59e0b, #ef4444); }
+        .item-6 { grid-column: span 1; grid-row: span 2; background: radial-gradient(circle at top left, #374151, #111827); }
+        .item-7 { grid-column: span 2; background: linear-gradient(90deg, #10b981, #047857); }
+        .item-8 { grid-column: span 1; background: url('https://images.unsplash.com/photo-1639322537228-f710d846310a?auto=format&fit=crop&q=80&w=400') center/cover; }
+
+        .badge {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(4px);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: fit-content;
+            margin-bottom: 1rem;
+            z-index: 2;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto 4rem;
+        }
+
+        .footer-col h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-col a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: #6b7280;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .social-links a:hover {
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .bento-grid { grid-template-columns: repeat(2, 1fr); }
+            .item-3 { grid-column: span 2; grid-row: span 1; }
+            .item-7 { grid-column: span 2; }
+            .floating-card { width: 300px; height: 190px; }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links, .nav-buttons { display: none; }
+            .hamburger { display: block; mix-blend-mode: normal; }
+            
+            .hero { flex-direction: column; padding-top: 8rem; text-align: center; }
+            .hero-content { margin-bottom: 3rem; }
+            .hero-buttons { justify-content: center; }
+            
+            .hero-cards-container { width: 100%; height: 400px; perspective: none; }
+            .floating-card { width: 280px; height: 175px; left: 50%; transform: translateX(-50%) !important; }
+            .card-1 { top: 0; z-index: 3; }
+            .card-2 { top: 60px; z-index: 2; }
+            .card-3 { top: 120px; z-index: 1; }
+            
+            .bento-grid { grid-template-columns: 1fr; }
+            .item-1, .item-2, .item-3, .item-4, .item-5, .item-6, .item-7, .item-8 { grid-column: span 1; grid-row: span 1; }
+            
+            .hero-footer { flex-direction: column; gap: 2rem; position: relative; bottom: 0; margin-top: 2rem; border-top: none;}
+            .logos { justify-content: center; }
+            .avatars { justify-content: center; }
+
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+
+        
+    </style>
+</head>
+<body>
+
+    <div id="toast">Action triggered!</div>
+
+    <nav id="navbar">
+        <div class="logo" onclick="showToast('Going to Homepage')">
+            <div class="logo-icon"></div>
+            Rocobank
+        </div>
+        
+        <div class="nav-links">
+            <a href="#features" class="nav-link" onclick="showToast('Viewing Features')">Features</a>
+            <a href="#security" class="nav-link" onclick="showToast('Viewing Security')">Security</a>
+            <a href="#pricing" class="nav-link" onclick="showToast('Viewing Pricing')">Pricing</a>
+            <a href="#about" class="nav-link" onclick="showToast('Viewing About Us')">About</a>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn btn-outline" onclick="showToast('Opening Web Wallet')">Wallet</button>
+            <button class="btn btn-solid" onclick="showToast('Starting Registration Flow')">Register</button>
+        </div>
+
+        <button class="hamburger" id="menuToggle">☰</button>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#" onclick="toggleMenu(); showToast('Viewing Features')">Features</a>
+        <a href="#" onclick="toggleMenu(); showToast('Viewing Security')">Security</a>
+        <a href="#" onclick="toggleMenu(); showToast('Viewing Pricing')">Pricing</a>
+        <button class="btn btn-outline" style="width: 80%; border-color: white; margin-top: 2rem;" onclick="toggleMenu(); showToast('Opening Web Wallet')">Wallet</button>
+        <button class="btn btn-solid" style="width: 80%;" onclick="toggleMenu(); showToast('Starting Registration Flow')">Register</button>
+    </div>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="subtitle text-anim">CREATE YOUR OWN</div>
+            <h1 class="title text-anim">
+                <span>Roco.bank</span>
+                <span class="title-bold">Professional bank card</span>
+            </h1>
+            <p class="description text-anim">
+                Rocobank Introduces A Bank Card Crafted For Professionals Who Demand Excellence. Built With Innovative Features, From Real-Time Controls To Secure Digital Payments, This Card Is The Perfect Companion For Your Fast-Paced Lifestyle.
+            </p>
+            <div class="hero-buttons text-anim">
+                <button class="btn btn-dark" onclick="showToast('Initiating Card Purchase')">BUY CARD</button>
+                <button class="btn btn-light" onclick="document.querySelector('.bento-section').scrollIntoView({behavior: 'smooth'})">DISCOVER</button>
+            </div>
+        </div>
+
+        <div class="hero-cards-container">
+            <div class="floating-card card-1 card-anim" onclick="showToast('Viewing Virtual Card Details')"></div>
+            <div class="floating-card card-2 card-anim" onclick="showToast('Viewing Physical Card Details')"></div>
+            <div class="floating-card card-3 card-anim" onclick="showToast('Viewing Metal Card Details')"></div>
+        </div>
+
+        <div class="hero-footer footer-anim">
+            <div class="logos">
+                <span style="font-weight: bold; cursor: pointer;">Medium</span>
+                <span style="font-weight: bold; cursor: pointer;">Ramp</span>
+                <span style="font-weight: bold; cursor: pointer;">Vercel</span>
+                <span style="font-weight: bold; cursor: pointer;">Cash App</span>
+            </div>
+            <div class="avatars">
+                <div class="avatar-block" onclick="showToast('Viewing Valentyna\'s Profile')">
+                    <img src="https://i.pravatar.cc/100?img=1" class="avatar-img" alt="User">
+                    <div class="avatar-info">
+                        <p>Valentyna</p>
+                        <span>$81,300.00</span>
+                    </div>
+                </div>
+                <div class="avatar-block" onclick="showToast('Viewing Patrick\'s Profile')">
+                    <img src="https://i.pravatar.cc/100?img=3" class="avatar-img" alt="User">
+                    <div class="avatar-info">
+                        <p>Patrick</p>
+                        <span>$24,500.00</span>
+                    </div>
+                </div>
+                <div class="avatar-block" onclick="showToast('Viewing Brandon\'s Profile')">
+                    <img src="https://i.pravatar.cc/100?img=8" class="avatar-img" alt="User">
+                    <div class="avatar-info">
+                        <p>Brandon</p>
+                        <span>$57,900.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bento-section" id="features">
+        <div class="bento-grid">
+            <div class="bento-item item-1 bento-anim" onclick="showToast('Learning about Credit Options')">
+                <div class="badge">New</div>
+                <h3>Credit<br>for you!</h3>
+            </div>
+            
+            <div class="bento-item item-2 bento-anim" onclick="showToast('Viewing Customer Stats')">
+                <div class="badge">Roco.Bank</div>
+                <h3>+390k</h3>
+                <p>Customer to our bank card</p>
+            </div>
+
+            <div class="bento-item item-3 bento-anim" onclick="showToast('Learning about Card Security')">
+                <h3 style="color: white; margin-top: auto;">Secure your future<br>with our physical card</h3>
+            </div>
+
+            <div class="bento-item item-4 bento-anim" onclick="showToast('Exploring AI Features')">
+                <h3 style="color: white; text-align: center; margin: auto;">AI bank</h3>
+            </div>
+
+            <div class="bento-item item-5 bento-anim" onclick="showToast('Exploring Easy Pay')">
+                <h3 style="color: white; text-align: center; margin: auto;">Easy pay</h3>
+            </div>
+
+            <div class="bento-item item-6 bento-anim" onclick="showToast('Viewing Partner Network')">
+                <div class="badge">Over 300</div>
+                <h3>Companies trusted</h3>
+            </div>
+
+            <div class="bento-item item-7 bento-anim" onclick="showToast('Viewing Payment Methods')">
+                <div class="badge">Pay Methods</div>
+                <h3 style="color: white;">Payment</h3>
+                <p style="color: rgba(255,255,255,0.8)">with over 10 methods</p>
+            </div>
+
+            <div class="bento-item item-8 bento-anim" onclick="showToast('Viewing Investment Portfolio')">
+                <h3 style="color: white; margin-top: auto;">Invested<br>$5.9m</h3>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo" style="margin-bottom: 1rem; mix-blend-mode: normal;">
+                    <div class="logo-icon"></div>
+                    Rocobank
+                </div>
+                <p style="color: #9ca3af; font-size: 0.9rem; line-height: 1.5; max-width: 250px;">
+                    The professional bank card crafted for modern professionals. Experience real-time control and secure digital payments.
+                </p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#" onclick="showToast('Loading Cards page')">Cards</a></li>
+                    <li><a href="#" onclick="showToast('Loading App page')">Banking App</a></li>
+                    <li><a href="#" onclick="showToast('Loading Business page')">Business</a></li>
+                    <li><a href="#" onclick="showToast('Loading Pricing page')">Pricing</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#" onclick="showToast('Loading Help Center')">Help Center</a></li>
+                    <li><a href="#" onclick="showToast('Loading API Docs')">API Documentation</a></li>
+                    <li><a href="#" onclick="showToast('Loading Blog')">Blog</a></li>
+                    <li><a href="#" onclick="showToast('Loading Security page')">Security</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#" onclick="showToast('Loading About page')">About Us</a></li>
+                    <li><a href="#" onclick="showToast('Loading Careers page')">Careers</a></li>
+                    <li><a href="#" onclick="showToast('Loading Legal page')">Legal & Privacy</a></li>
+                    <li><a href="#" onclick="showToast('Loading Contact page')">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Rocobank Inc. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#" onclick="showToast('Opening Twitter')">Twitter</a>
+                <a href="#" onclick="showToast('Opening LinkedIn')">LinkedIn</a>
+                <a href="#" onclick="showToast('Opening Instagram')">Instagram</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- TOAST NOTIFICATION LOGIC ---
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // --- MOBILE MENU LOGIC ---
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        function toggleMenu() {
+            mobileMenu.classList.toggle('active');
+            if (mobileMenu.classList.contains('active')) {
+                menuToggle.textContent = '✕';
+                menuToggle.style.mixBlendMode = 'normal'; // Ensure visibility over dark bg
+            } else {
+                menuToggle.textContent = '☰';
+                // Reset blend mode based on scroll position
+                if(window.scrollY < document.querySelector('.bento-section').offsetTop - 100) {
+                    menuToggle.style.mixBlendMode = 'difference';
+                }
+            }
+        }
+
+        menuToggle.addEventListener('click', toggleMenu);
+
+        // --- GSAP ANIMATIONS ---
+        gsap.registerPlugin(ScrollTrigger);
+        const tl = gsap.timeline();
+
+        // 1. Text reveal on Hero
+        tl.fromTo(".text-anim", 
+            { y: 50, opacity: 0 }, 
+            { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power3.out" }
+        );
+
+        // 2. Cards animating in from right
+        if(window.innerWidth > 768) {
+            tl.fromTo(".card-anim",
+                { x: 200, opacity: 0, rotationY: 45 },
+                { x: 0, opacity: 1, rotationY: 0, duration: 1, stagger: 0.15, ease: "back.out(1.2)" },
+                "-=0.5"
+            );
+        } else {
+            tl.fromTo(".card-anim",
+                { y: 50, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power2.out" },
+                "-=0.5"
+            );
+        }
+
+        // 3. Footer fade in
+        tl.fromTo(".footer-anim",
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" },
+            "-=0.5"
+        );
+
+        // Bento Grid Scroll Animation
+        gsap.fromTo(".bento-anim", 
+            { y: 50, opacity: 0 },
+            {
+                y: 0, 
+                opacity: 1, 
+                duration: 0.6, 
+                stagger: 0.05, 
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: ".bento-section",
+                    start: "top 80%", 
+                    toggleActions: "play none none reverse"
+                }
+            }
+        );
+
+        // Background Color & Nav Shift on Scroll
+        ScrollTrigger.create({
+            trigger: ".bento-section",
+            start: "top 10%", // Triggers when the dark section reaches near top
+            onEnter: () => {
+                gsap.to("#navbar", { mixBlendMode: "normal", backgroundColor: "rgba(18, 18, 18, 0.9)", backdropFilter: "blur(10px)" });
+                if(!mobileMenu.classList.contains('active')) menuToggle.style.mixBlendMode = "normal";
+            },
+            onLeaveBack: () => {
+                gsap.to("#navbar", { mixBlendMode: "difference", backgroundColor: "transparent", backdropFilter: "none" });
+                if(!mobileMenu.classList.contains('active')) menuToggle.style.mixBlendMode = "difference";
+            }
+        });
+
+        // Interactive Parallax on Hero Cards based on Mouse Move (Desktop Only)
+        const cardsContainer = document.querySelector('.hero-cards-container');
+        const cards = document.querySelectorAll('.card-anim');
+
+        if(window.innerWidth > 768) {
+            cardsContainer.addEventListener('mousemove', (e) => {
+                const rect = cardsContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+
+                cards.forEach((card, index) => {
+                    const depth = (index + 1) * 0.05;
+                    gsap.to(card, {
+                        x: x * depth,
+                        y: y * depth,
+                        rotationY: x * depth * 0.5,
+                        rotationX: -y * depth * 0.5,
+                        duration: 0.5,
+                        ease: "power1.out"
+                    });
+                });
+            });
+
+            cardsContainer.addEventListener('mouseleave', () => {
+                cards.forEach((card, index) => {
+                    let rot = index === 0 ? -5 : (index === 1 ? 5 : -2);
+                    gsap.to(card, {
+                        x: 0,
+                        y: 0,
+                        rotationY: 0,
+                        rotationX: 0,
+                        rotationZ: rot,
+                        duration: 1,
+                        ease: "elastic.out(1, 0.3)"
+                    });
+                });
+            });
+        }
+    </script>
+</body>
+</html>
