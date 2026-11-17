@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SikaVest | Modern Wealth Management</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            DEFAULT: '#ccff00', // Neon Lime/Green
+                            hover: '#b3e600',
+                            dark: '#09090b', // Zinc 950
+                            card: '#131316', // Dark gray for cards
+                            border: '#27272a' // Zinc 800
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #09090b;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Hero Glowing Arch */
+        .hero-arch-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 800px;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .hero-arch {
+            position: absolute;
+            top: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140%;
+            height: 1000px;
+            border-top: 1px solid rgba(204, 255, 0, 0.4);
+            border-radius: 50%;
+            background: radial-gradient(circle at top, rgba(204, 255, 0, 0.08) 0%, transparent 60%);
+            box-shadow: 0 -20px 100px rgba(204, 255, 0, 0.15);
+        }
+
+        @media (min-width: 768px) {
+            .hero-arch { width: 110%; }
+        }
+
+        /* Scroll Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* Custom Badge */
+        .badge-brand {
+            background: rgba(204, 255, 0, 0.1);
+            color: #ccff00;
+            border: 1px solid rgba(204, 255, 0, 0.2);
+        }
+
+        /* Accordion */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 200px; /* Adjust based on content */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .accordion-item i {
+            transition: transform 0.3s ease;
+        }
+        .accordion-item.active i {
+            transform: rotate(45deg);
+        }
+
+        /* Subtle Card Hover */
+        .glass-card {
+            background: linear-gradient(180deg, rgba(24, 24, 27, 0.6) 0%, rgba(18, 18, 20, 0.9) 100%);
+            border: 1px solid #27272a;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(204, 255, 0, 0.3);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand selection:text-black">
+
+    <nav class="fixed w-full z-50 bg-brand-dark/80 backdrop-blur-md border-b border-white/5 py-4 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-brand rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-chart-pie text-black"></i>
+                </div>
+                <span class="font-bold text-xl tracking-tight">SikaVest</span>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-8 bg-white/5 px-6 py-2 rounded-full border border-white/10 text-sm font-medium text-gray-300">
+                <a href="#features" class="hover:text-white transition-colors">Features</a>
+                <a href="#how-it-works" class="hover:text-white transition-colors">How it works</a>
+                <a href="#testimonials" class="hover:text-white transition-colors">Testimonials</a>
+                <a href="#faqs" class="hover:text-white transition-colors">FAQs</a>
+            </div>
+
+            <div>
+                <a href="#" class="text-sm font-semibold border border-white/20 px-5 py-2 rounded-lg hover:bg-white/10 transition-colors">Login</a>
+            </div>
+        </div>
+        
+    </nav>
+
+    <section class="relative pt-40 pb-20 px-6 md:px-12 text-center min-h-[85vh] flex flex-col justify-center items-center">
+        <div class="hero-arch-container">
+            <div class="hero-arch"></div>
+        </div>
+        
+        <div class="max-w-4xl mx-auto z-10 reveal">
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] mb-6">
+                Wealth management, <br/>
+                <span class="text-brand">the efficient way</span>
+            </h1>
+            <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10">
+                Innovative investment solutions for corporate firms and emerging businesses in Ghana weary of traditional banking methodologies. Arriving shortly.
+            </p>
+            
+            <form class="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
+                <input type="email" placeholder="kofi@company.com.gh" required 
+                       class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-brand transition-colors">
+                <button type="submit" class="w-full sm:w-auto bg-brand text-black font-semibold px-6 py-3 rounded-lg hover:bg-brand-hover transition-colors whitespace-nowrap">
+                    Get notified
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <section class="py-10 border-t border-white/5 px-6 reveal">
+        <p class="text-center text-sm text-gray-500 mb-8 font-medium">Already chosen by financial leaders</p>
+        <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+            <div class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-building-columns"></i> Apex Bank</div>
+            <div class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-mobile-screen"></i> PayStack Connect</div>
+            <div class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-shield-halved"></i> Vanguard Capital</div>
+            <div class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-coins"></i> CediTrust</div>
+            <div class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-wallet"></i> OmniPay</div>
+        </div>
+    </section>
+
+    <section id="features" class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <div class="text-center mb-20 reveal">
+            <div class="inline-flex items-center gap-2 badge-brand px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-6">
+                <i class="fa-solid fa-star text-[10px]"></i> Introducing SikaVest Pro
+            </div>
+            <h2 class="text-2xl md:text-3xl font-medium text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                We know the local market. You need high-yield instruments to beat inflation in the corporate world, but hiring dedicated portfolio managers can be costly. <span class="text-white font-bold">That's when SikaVest steps in.</span>
+            </h2>
+        </div>
+
+        <div class="text-center mb-12 reveal">
+            <div class="inline-flex items-center gap-2 badge-brand px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4">
+                <i class="fa-solid fa-bolt text-[10px]"></i> What you'll get
+            </div>
+            <h3 class="text-3xl md:text-4xl font-bold">We resolve problems associated with<br/>traditional corporate finance.</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="glass-card rounded-2xl p-8 flex flex-col justify-between reveal reveal-delay-1 min-h-[300px]">
+                <div class="h-32 flex items-end gap-2 mb-6 border-b border-white/5 pb-4">
+                    <div class="w-1/6 bg-brand/20 h-1/3 rounded-t-sm"></div>
+                    <div class="w-1/6 bg-brand/40 h-1/2 rounded-t-sm"></div>
+                    <div class="w-1/6 bg-brand/60 h-3/4 rounded-t-sm"></div>
+                    <div class="w-1/6 bg-brand h-full rounded-t-sm shadow-[0_0_15px_rgba(204,255,0,0.4)]"></div>
+                    <div class="w-1/6 bg-brand/40 h-2/3 rounded-t-sm"></div>
+                    <div class="w-1/6 bg-brand/20 h-1/4 rounded-t-sm"></div>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-2">High-yield returns</h4>
+                    <p class="text-sm text-gray-400">Access premium T-Bills and fixed-income assets at a fraction of standard brokerage fees.</p>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-8 flex flex-col justify-between reveal reveal-delay-2 min-h-[300px]">
+                <div class="flex-grow flex items-center justify-center mb-6">
+                    <div class="bg-black border border-white/10 rounded-xl p-4 w-full relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-16 h-16 bg-brand/20 blur-xl rounded-full"></div>
+                        <div class="flex items-center justify-between mb-4">
+                            <i class="fa-solid fa-bolt text-brand"></i>
+                            <span class="text-[10px] text-gray-500 bg-white/5 px-2 py-1 rounded">Live Rates</span>
+                        </div>
+                        <div class="text-2xl font-bold mb-1">GHS 245,000</div>
+                        <div class="text-xs text-brand">+12.4% (YTD)</div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-2">Tailor-made portfolios</h4>
+                    <p class="text-sm text-gray-400">We've got the expertise to structure assets matching your firm's liquidity needs.</p>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-8 flex flex-col justify-between reveal reveal-delay-3 min-h-[300px]">
+                <div class="flex-grow relative mb-6 border-b border-white/5 flex items-center">
+                    <svg viewBox="0 0 100 40" class="w-full h-auto stroke-brand fill-none" stroke-width="1.5">
+                        <path d="M0 30 Q 20 25, 40 10 T 80 15 T 100 5" />
+                        <circle cx="80" cy="15" r="2" class="fill-brand shadow-[0_0_10px_#ccff00]" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-2">Scalable as you grow</h4>
+                    <p class="text-sm text-gray-400">From seed capital management to IPO treasury structuring, we evolve with you.</p>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-8 md:col-span-2 flex flex-col md:flex-row items-center gap-8 reveal">
+                <div class="w-full md:w-1/2 flex gap-4 justify-center md:justify-start flex-wrap">
+                    <div class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xl hover:bg-white/10 transition"><i class="fa-solid fa-money-bill-transfer text-blue-400"></i></div>
+                    <div class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xl hover:bg-white/10 transition"><i class="fa-solid fa-building-columns text-gray-300"></i></div>
+                    <div class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xl hover:bg-white/10 transition"><i class="fa-solid fa-mobile-screen text-brand"></i></div>
+                </div>
+                <div class="w-full md:w-1/2">
+                    <h4 class="text-xl font-bold mb-2">Workflow integration</h4>
+                    <p class="text-sm text-gray-400">Seamlessly connect your ERP and local bank accounts for automated sweeps and reconciliations.</p>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-8 flex flex-col justify-between reveal">
+                <div class="flex -space-x-3 mb-6 flex-grow items-center">
+                    <img class="w-10 h-10 rounded-full border-2 border-[#131316]" src="https://i.pravatar.cc/100?img=11" alt="Avatar">
+                    <img class="w-10 h-10 rounded-full border-2 border-[#131316]" src="https://i.pravatar.cc/100?img=12" alt="Avatar">
+                    <img class="w-10 h-10 rounded-full border-2 border-[#131316]" src="https://i.pravatar.cc/100?img=33" alt="Avatar">
+                    <div class="w-10 h-10 rounded-full border-2 border-brand bg-brand/10 flex items-center justify-center text-xs font-bold text-brand">+2</div>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-2">Dedicated Advisors</h4>
+                    <p class="text-sm text-gray-400">Direct access to BoG-certified financial analysts in real-time.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-3 mt-8 text-xs text-gray-400 reveal">
+            <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-md flex items-center gap-2"><i class="fa-solid fa-check text-brand"></i> MoMo Integrated</span>
+            <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-md flex items-center gap-2"><i class="fa-solid fa-check text-brand"></i> Tax Optimizations</span>
+            <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-md flex items-center gap-2"><i class="fa-solid fa-check text-brand"></i> Real-time Reports</span>
+            <span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-md flex items-center gap-2"><i class="fa-solid fa-check text-brand"></i> BoG Regulated Assets</span>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="py-24 px-6 md:px-12 bg-[#0c0c0e] border-y border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <div class="inline-flex items-center gap-2 badge-brand px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4">
+                    <i class="fa-solid fa-gear text-[10px]"></i> How it works
+                </div>
+                <h3 class="text-3xl md:text-4xl font-bold">Top-tier financial growth,<br/>delivered effortlessly.</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-8 rounded-2xl reveal reveal-delay-1">
+                    <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 text-2xl text-brand border border-white/10">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">Tell us your vision</h4>
+                    <p class="text-sm text-gray-400">Share your company's liquidity requirements and risk appetite. We're here to listen and structure.</p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl reveal reveal-delay-2">
+                    <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 text-2xl text-brand border border-white/10">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">Watch it grow</h4>
+                    <p class="text-sm text-gray-400">Sit back and relax. Our algorithms and expert managers execute trades to turn idle cash into yield.</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-2xl reveal reveal-delay-3">
+                    <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 text-2xl text-brand border border-white/10">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">Get ongoing support</h4>
+                    <p class="text-sm text-gray-400">Your subscription ensures continuous access to our advisory team for strategic pivots.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 md:px-12 max-w-7xl mx-auto reveal">
+        <div class="glass-card rounded-[2rem] overflow-hidden flex flex-col md:flex-row items-stretch">
+            <div class="p-10 md:p-16 md:w-5/12 flex flex-col justify-center border-r border-white/5">
+                <div class="inline-flex items-center gap-2 text-brand text-xs font-bold uppercase tracking-wider mb-6">
+                    <i class="fa-solid fa-play"></i> Customer Story
+                </div>
+                <h3 class="text-2xl md:text-3xl font-medium leading-tight mb-8">
+                    "Our treasury growth no longer necessitates the recruitment of additional in-house financial controllers."
+                </h3>
+                <div>
+                    <div class="font-bold">Kwame Osei</div>
+                    <div class="text-sm text-gray-500">CFO at TechHub Accra</div>
+                </div>
+            </div>
+            <div class="md:w-7/12 relative bg-zinc-900 min-h-[300px]">
+                <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=800&q=80" alt="Customer Video" class="w-full h-full object-cover opacity-60">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <button class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-brand hover:text-black hover:scale-110 transition-all duration-300 shadow-[0_0_30px_rgba(204,255,0,0.2)]">
+                        <i class="fa-solid fa-play ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mt-20 border-b border-white/5 pb-20">
+            <div>
+                <div class="text-5xl font-bold mb-2">45k+</div>
+                <div class="text-sm text-gray-400">Active Investors</div>
+            </div>
+            <div>
+                <div class="text-5xl font-bold mb-2">₵50m+</div>
+                <div class="text-sm text-gray-400">Assets Managed</div>
+            </div>
+            <div>
+                <div class="text-5xl font-bold mb-2">4.8</div>
+                <div class="text-sm text-gray-400">App Store Rating</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="py-12 px-6 md:px-12 max-w-7xl mx-auto">
+        <div class="text-center mb-16 reveal">
+            <div class="inline-flex items-center gap-2 badge-brand px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4">
+                <i class="fa-solid fa-star text-[10px]"></i> Testimonials
+            </div>
+            <h3 class="text-3xl md:text-4xl font-bold">What our clients say about us</h3>
+        </div>
+
+        <div class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+            <div class="glass-card p-6 rounded-2xl break-inside-avoid reveal">
+                <div class="flex items-center gap-3 mb-4">
+                    <img src="https://i.pravatar.cc/100?img=3" alt="User" class="w-10 h-10 rounded-full">
+                    <div>
+                        <div class="font-bold text-sm">Abena Mensah</div>
+                        <div class="text-xs text-gray-500">Founder, Accra Logistics</div>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-300 mb-4 leading-relaxed">SikaVest has been instrumental in optimizing our corporate treasury. Their team's expertise in fixed deposits resulted in a highly secure and yielding portfolio. Our surplus cash is finally working for us.</p>
+                <div class="text-xs text-gray-600">12 Feb 2024</div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl break-inside-avoid reveal">
+                <div class="flex items-center gap-3 mb-4">
+                    <img src="https://i.pravatar.cc/100?img=15" alt="User" class="w-10 h-10 rounded-full">
+                    <div>
+                        <div class="font-bold text-sm">David Odoi</div>
+                        <div class="text-xs text-gray-500">Sales Director, KenteCorp</div>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-300 mb-4 leading-relaxed">Our previous banking setup was slow and bureaucratic, costing us time. SikaVest fixed the flow, optimized our savings via MoMo integrations, and now transactions are blazing fast. We're ecstatic!</p>
+                <div class="text-xs text-gray-600">03 Mar 2024</div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl break-inside-avoid reveal">
+                <div class="flex items-center gap-3 mb-4">
+                    <img src="https://i.pravatar.cc/100?img=33" alt="User" class="w-10 h-10 rounded-full">
+                    <div>
+                        <div class="font-bold text-sm">Emmanuel Appiah</div>
+                        <div class="text-xs text-gray-500">CEO, Event Masters GH</div>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-300 mb-4 leading-relaxed">SikaVest developed a comprehensive liquidity management system for our seasonal event business. Their attention to our cash-flow needs was evident throughout.</p>
+                <div class="text-xs text-gray-600">28 Jan 2024</div>
+            </div>
+            
+            <div class="glass-card p-6 rounded-2xl break-inside-avoid reveal">
+                <div class="flex items-center gap-3 mb-4">
+                    <img src="https://i.pravatar.cc/100?img=47" alt="User" class="w-10 h-10 rounded-full">
+                    <div>
+                        <div class="font-bold text-sm">Grace Lamptey</div>
+                        <div class="text-xs text-gray-500">Managing Partner, Legal Edge</div>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-300 mb-4 leading-relaxed">SikaVest completely overhauled how our partnership manages retained earnings. Lightning-fast dashboard and exceptionally secure. Absolutely thrilled with the returns on the BoG bills.</p>
+                <div class="text-xs text-gray-600">05 Apr 2024</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faqs" class="py-24 px-6 md:px-12 max-w-5xl mx-auto">
+        <div class="text-center mb-16 reveal">
+            <div class="inline-flex items-center gap-2 badge-brand px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4">
+                <i class="fa-solid fa-circle-question text-[10px]"></i> FAQs
+            </div>
+            <h3 class="text-3xl md:text-4xl font-bold">We've got the answers</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+            <div class="space-y-4">
+                <div class="accordion-item glass-card rounded-xl border border-white/10 px-6 cursor-pointer reveal">
+                    <div class="flex justify-between items-center py-5">
+                        <h4 class="font-semibold text-sm">Is SikaVest regulated by the Bank of Ghana?</h4>
+                        <i class="fa-solid fa-plus text-gray-500 text-sm"></i>
+                    </div>
+                    <div class="accordion-content text-sm text-gray-400 border-t border-white/5">
+                        Yes, SikaVest operates in partnership with BoG-licensed asset management firms and utilizes Tier-1 banking infrastructure to ensure complete regulatory compliance and security of funds.
+                    </div>
+                </div>
+                <div class="accordion-item glass-card rounded-xl border border-white/10 px-6 cursor-pointer reveal">
+                    <div class="flex justify-between items-center py-5">
+                        <h4 class="font-semibold text-sm">How to contact my dedicated advisor?</h4>
+                        <i class="fa-solid fa-plus text-gray-500 text-sm"></i>
+                    </div>
+                    <div class="accordion-content text-sm text-gray-400 border-t border-white/5">
+                        Pro and Enterprise clients have direct access to their advisors via the in-app secure chat, or through priority phone support available Monday to Friday, 8AM to 5PM GMT.
+                    </div>
+                </div>
+                <div class="accordion-item glass-card rounded-xl border border-white/10 px-6 cursor-pointer reveal">
+                    <div class="flex justify-between items-center py-5">
+                        <h4 class="font-semibold text-sm">How do I integrate Mobile Money?</h4>
+                        <i class="fa-solid fa-plus text-gray-500 text-sm"></i>
+                    </div>
+                    <div class="accordion-content text-sm text-gray-400 border-t border-white/5">
+                        Simply navigate to the "Integrations" tab in your dashboard, select MTN MoMo, Telecel Cash, or AT Money, and follow the API binding instructions for seamless corporate sweeps.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="accordion-item glass-card rounded-xl border border-white/10 px-6 cursor-pointer reveal">
+                    <div class="flex justify-between items-center py-5">
+                        <h4 class="font-semibold text-sm">What are the minimum deposit requirements?</h4>
+                        <i class="fa-solid fa-plus text-gray-500 text-sm"></i>
+                    </div>
+                    <div class="accordion-content text-sm text-gray-400 border-t border-white/5">
+                        Our corporate starter plans require a minimum treasury deposit of GHS 10,000 to access fractionalized T-Bills and fixed-income assets.
+                    </div>
+                </div>
+                <div class="accordion-item glass-card rounded-xl border border-white/10 px-6 cursor-pointer reveal">
+                    <div class="flex justify-between items-center py-5">
+                        <h4 class="font-semibold text-sm">Can I withdraw funds instantly?</h4>
+                        <i class="fa-solid fa-plus text-gray-500 text-sm"></i>
+                    </div>
+                    <div class="accordion-content text-sm text-gray-400 border-t border-white/5">
+                        Liquid assets can be withdrawn to your linked corporate bank account within 2-4 hours. Fixed-term instruments are subject to their respective maturity dates.
+                    </div>
+                </div>
+                <div class="accordion-item glass-card rounded-xl border border-white/10 px-6 cursor-pointer reveal">
+                    <div class="flex justify-between items-center py-5">
+                        <h4 class="font-semibold text-sm">Disclaimer of Financial Advice</h4>
+                        <i class="fa-solid fa-plus text-gray-500 text-sm"></i>
+                    </div>
+                    <div class="accordion-content text-sm text-gray-400 border-t border-white/5">
+                        All investments carry risk. Historical performance is not indicative of future results. Please consult our terms and conditions for full risk disclosures before investing.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 md:px-12 relative overflow-hidden">
+        <div class="absolute inset-0 bg-brand/5 blur-3xl z-[-1] rounded-[50%] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4"></div>
+        
+        <div class="max-w-3xl mx-auto text-center glass-card border border-brand/20 p-12 rounded-[2rem] reveal">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">Elevate the way you<br/>manage wealth</h2>
+            <p class="text-gray-400 mb-10 max-w-xl mx-auto">Get ready to start generating stunning, efficient returns without the hassle of traditional banking. Arriving shortly in Ghana.</p>
+            
+            <form class="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
+                <input type="email" placeholder="kofi@company.com.gh" required 
+                       class="w-full bg-[#09090b] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-brand transition-colors">
+                <button type="submit" class="w-full sm:w-auto bg-brand text-black font-semibold px-6 py-3 rounded-lg hover:bg-brand-hover transition-colors whitespace-nowrap">
+                    Get notified
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="border-t border-white/5 py-8 px-6 md:px-12 mt-10 text-sm text-gray-500">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2 text-white font-bold">
+                <div class="w-5 h-5 bg-white rounded-sm flex items-center justify-center">
+                    <i class="fa-solid fa-chart-pie text-black text-[10px]"></i>
+                </div>
+                SikaVest
+            </div>
+            
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-white transition-colors">Contact</a>
+                <a href="#" class="hover:text-white transition-colors">Privacy & Cookie Policy</a>
+                <a href="#" class="hover:text-white transition-colors">Terms & Conditions</a>
+            </div>
+            
+            <div>
+                &copy; 2024 SikaVest Financial Tech.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll Animation Logic (Intersection Observer)
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    } else {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // Run once
+                    }
+                });
+            }, revealOptions);
+
+            reveals.forEach(reveal => {
+                revealOnScroll.observe(reveal);
+            });
+
+            // Accordion Logic
+            const accordionItems = document.querySelectorAll('.accordion-item');
+            
+            accordionItems.forEach(item => {
+                const header = item.querySelector('.flex');
+                header.addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+                    
+                    // Close all other accordions
+                    accordionItems.forEach(otherItem => {
+                        otherItem.classList.remove('active');
+                        const icon = otherItem.querySelector('i');
+                        icon.classList.remove('fa-minus', 'text-brand');
+                        icon.classList.add('fa-plus', 'text-gray-500');
+                    });
+
+                    // Toggle current
+                    if (!isActive) {
+                        item.classList.add('active');
+                        const icon = item.querySelector('i');
+                        icon.classList.remove('fa-plus', 'text-gray-500');
+                        icon.classList.add('fa-minus', 'text-brand');
+                    }
+                });
+            });
+            
+            // Prevent default form submissions for demo
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const btn = form.querySelector('button');
+                    const originalText = btn.innerText;
+                    btn.innerText = "Subscribed!";
+                    btn.classList.replace('bg-brand', 'bg-white');
+                    setTimeout(() => {
+                        btn.innerText = originalText;
+                        btn.classList.replace('bg-white', 'bg-brand');
+                        form.reset();
+                    }, 3000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
